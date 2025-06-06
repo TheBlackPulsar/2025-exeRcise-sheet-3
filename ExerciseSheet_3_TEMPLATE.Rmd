@@ -298,6 +298,28 @@ Looking at table tbl_df we can see that there are living much lesser men per wom
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
+    
+```{r}
+germany_long %>%
+  mutate(age_group = case_when(
+    Age <= 19 ~ "Young",
+    Age <= 64 ~ "Adult",
+    Age > 64  ~ "Old"
+  )) %>%
+  group_by(Year, age_group) %>%
+  summarise(mean_ratio = mean(sex_ratio, na.rm = TRUE)) %>%
+  ggplot(aes(x = age_group, y = mean_ratio, fill = as.factor(Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Sex ratio by age in Germany (1970 vs. 1999)",
+    x = "Age group",
+    y = "Men per 100 women",
+    fill = "year"
+  ) +
+  theme_minimal()
+
+```
+
 
 ## Final Note
 
