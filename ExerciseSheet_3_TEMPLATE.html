@@ -2513,12 +2513,45 @@ for the film rating. Why is this appropriate?</li>
 <p>The characters found in the <code>film_rating</code> section of the pixar_films.csv show the Motion Picture Associations rating of the films by their film rating system. The G that we can see for example stands for general audience - All ages admitted while the PG stand for Pranetal guidance suggested - Some material may not be suitable for children.</p>
 <p>The <code>film_rating</code> variable is a categorical variable that tells if a film is save for children or has a risk to watch it with children. In case of this categorical variable it is appropriate to create a factor that tells the order of the rakings from save for children to not save for children as you can see above.</p>
 <ol start="2" type="a">
-<li><p>Inspect the film titles manually. Which films form a film series? A
+<li>Inspect the film titles manually. Which films form a film series? A
 film series can be identified by a common word in the titles of the
 films, often in conjunction with a number in the title,
 e.g. “Despicable Me” and “Despicable Me 2”. Create a dataframe which
 displays a list of the different series with the titles of the films
-and how many films belong to the series. Output the dataframe.</p></li>
+and how many films belong to the series. Output the dataframe.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">series_candidates</span> <span class="op">&lt;-</span> <span class="va">pixar_films</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">film</span>, <span class="st">&quot;Toy Story|Monsters|Finding|Incredibles|Cars&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>series <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">film</span>, <span class="st">&quot;Toy Story&quot;</span><span class="op">)</span> <span class="op">~</span> <span class="st">&quot;Toy Story&quot;</span>,</span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">film</span>, <span class="st">&quot;Monsters&quot;</span><span class="op">)</span> <span class="op">~</span> <span class="st">&quot;Monsters&quot;</span>,</span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">film</span>, <span class="st">&quot;Finding&quot;</span><span class="op">)</span> <span class="op">~</span> <span class="st">&quot;Finding&quot;</span>,</span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">film</span>, <span class="st">&quot;Incredibles&quot;</span><span class="op">)</span> <span class="op">~</span> <span class="st">&quot;Incredibles&quot;</span>,</span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">film</span>, <span class="st">&quot;Cars&quot;</span><span class="op">)</span> <span class="op">~</span> <span class="st">&quot;Cars&quot;</span>,</span>
+<span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">&quot;Other&quot;</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">series_summary</span> <span class="op">&lt;-</span> <span class="va">series_candidates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
+<span>    films <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">film</span>, collapse <span class="op">=</span> <span class="st">&quot;; &quot;</span><span class="op">)</span>,</span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">series_summary</span></span></code></pre>
+</div>
+<pre><code># A tibble: 5 × 3
+  series      films                                                n
+  &lt;chr&gt;       &lt;chr&gt;                                            &lt;int&gt;
+1 Cars        Cars; Cars 2; Cars 3                                 3
+2 Finding     Finding Nemo; Finding Dory                           2
+3 Incredibles The Incredibles; Incredibles 2                       2
+4 Monsters    Monsters, Inc.; Monsters University                  2
+5 Toy Story   Toy Story; Toy Story 2; Toy Story 3; Toy Story 4     4</code></pre>
+</div>
+<ol start="3" type="a">
 <li><p>Load the <code>public_response</code> dataframe into R. Convert the
 <code>cinema_score</code> variable into a factor while ensuring the factor
 levels are defined in ascending order, from the lowest to the
@@ -2570,7 +2603,7 @@ correctly label the figure.</li>
 <h2 id="final-note">Final Note</h2>
 <p>Make sure to push all your commits and changes to GitHub before
 submitting the exercise sheet.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
