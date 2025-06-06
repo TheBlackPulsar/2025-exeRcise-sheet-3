@@ -93,7 +93,36 @@ a)  Load the `pixar_films` dataset into R. Clean the dataset by removing
     the possible values and what do they mean? Create a factor variable
     for the film rating. Why is this appropriate?
 
-<!-- -->
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(readr)
+```
+
+```{r}
+pixar_films <- read_csv("pixar_films.csv")
+
+pixar_films <- pixar_films %>%
+  filter(!is.na(title))
+
+pixar_films <- pixar_films %>%
+  mutate(
+    film_rating = factor(
+      film_rating,
+      levels = c("G", "PG", "PG-13", "R", "NC-17"),
+      ordered = TRUE
+    )
+  )
+
+pixar_films %>% 
+  arrange(film_rating) %>% 
+    head(10)
+```
+
+The characters found in the `film_rating` section of the pixar_films.csv show the Motion Picture Associations rating of the films by their film rating system. The G that we can see for example stands for general audience - All ages admitted while the PG stand for Pranetal guidance suggested - Some material may not be suitable for children.
+
+The `film_rating` variable is a categorical variable that tells if a film is save for children or has a risk to watch it with children. In case of this categorical variable it is appropriate to create a factor that tells the order of the rakings from save for children to not save for children as you can see above.
 
 b)  Inspect the film titles manually. Which films form a film series? A
     film series can be identified by a common word in the titles of the
