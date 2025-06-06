@@ -230,8 +230,8 @@ a)  Go to <https://github.com/owid/owid-datasets/tree/master/datasets>
 b)  Download the dataset and track it in git.
 c)  Put the name / title of the dataset and a link to it below.
 
--   Dataset Name: ...
--   Link: <https://github.com/owid/owid-datasets/>...
+-   Dataset Name: Sex ratio by age (OWID based on UNWPP, 2017)
+-   Link: <https://github.com/owid/owid-datasets/tree/master/datasets/Sex%20ratio%20by%20age%20(OWID%20based%20on%20UNWPP%2C%202017)>
 
 d)  Come up with a (research) question you want to answer with the data
     and briefly explain why you believe this is an interesting question
