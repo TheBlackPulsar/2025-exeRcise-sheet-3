@@ -191,6 +191,32 @@ d)  Choose one of the variables representing the public response and
 
     What do you notice when comparing the scores of the films in a
     series? Do you see any patterns?
+    
+```{r}
+pixar_series <- series_candidates %>%
+  left_join(public_response, by = "film") %>%
+  group_by(series, film) %>%
+  summarise(
+    metacritic = mean(metacritic, na.rm = TRUE),
+    release_date = first(release_date),
+    .groups = "drop"
+  ) %>%
+  arrange(series, release_date) %>%
+  group_by(series) %>%
+  mutate(film = factor(film, levels = film))
+
+ggplot(pixar_series, aes(x = series, y = metacritic, fill = film)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  labs(
+    title = "Metacritic Scores for Pixar Film Series (Sorted by Release)",
+    x = "Film Series",
+    y = "Metacritic Score"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The first film of each series was the one with the best metacritic score. In the case of cars and toy story we could also assume that the third one is always better as the second one that was lower than the first but this woeuld only be a hypothesis that is not proofed by only two exapmles.
 
 ## Exercise 4: Open Analysis (4 points)
 
