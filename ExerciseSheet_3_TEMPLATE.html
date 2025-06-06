@@ -2552,11 +2552,46 @@ and how many films belong to the series. Output the dataframe.</li>
 5 Toy Story   Toy Story; Toy Story 2; Toy Story 3; Toy Story 4     4</code></pre>
 </div>
 <ol start="3" type="a">
-<li><p>Load the <code>public_response</code> dataframe into R. Convert the
+<li>Load the <code>public_response</code> dataframe into R. Convert the
 <code>cinema_score</code> variable into a factor while ensuring the factor
 levels are defined in ascending order, from the lowest to the
 highest score. Combine <code>public_response</code> with the <code>pixar_films</code>
-dataset using an appropriate merge variable.</p></li>
+dataset using an appropriate merge variable.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">public_response</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">&quot;public_response.csv&quot;</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">public_response</span> <span class="op">&lt;-</span> <span class="va">public_response</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cinema_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cinema_score</span>, </span>
+<span>                               levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;A+&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;A-&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;F&quot;</span><span class="op">)</span>,</span>
+<span>                               ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pixar_joined</span> <span class="op">&lt;-</span> <span class="va">pixar_films</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">public_response</span>, by <span class="op">=</span> <span class="st">&quot;film&quot;</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pixar_joined</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">cinema_score</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">film</span>, <span class="va">cinema_score</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 10 × 9
+   film          cinema_score number release_date run_time film_rating
+   &lt;chr&gt;         &lt;ord&gt;         &lt;dbl&gt; &lt;date&gt;          &lt;dbl&gt; &lt;ord&gt;      
+ 1 Toy Story 2   A+                3 1999-11-24         92 G          
+ 2 Monsters, In… A+                4 2001-11-02         92 G          
+ 3 Finding Nemo  A+                5 2003-05-30        100 G          
+ 4 The Incredib… A+                6 2004-11-05        115 PG         
+ 5 Up            A+               10 2009-05-29         96 PG         
+ 6 Coco          A+               19 2017-11-22        105 PG         
+ 7 Incredibles 2 A+               20 2018-06-15        118 PG         
+ 8 Toy Story     A                 1 1995-11-22         81 G          
+ 9 A Bug&#39;s Life  A                 2 1998-11-25         95 G          
+10 Cars          A                 7 2006-06-09        117 G          
+# ℹ 3 more variables: rotten_tomatoes &lt;dbl&gt;, metacritic &lt;dbl&gt;,
+#   critics_choice &lt;dbl&gt;</code></pre>
+</div>
+<ol start="4" type="a">
 <li><p>Choose one of the variables representing the public response and
 create a bar plot for the films belonging to a series. Here are the
 details of the plot:</p>
@@ -2603,7 +2638,7 @@ correctly label the figure.</li>
 <h2 id="final-note">Final Note</h2>
 <p>Make sure to push all your commits and changes to GitHub before
 submitting the exercise sheet.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
