@@ -244,6 +244,57 @@ e)  Use R to answer your chosen question. Please limit your analysis to
     the functions and techniques we have covered so far in the course.
     You are **not expected** to use advanced statistical models or
     external packages which haven't been introduced.
+    
+```{r}
+sex_ratio <- read_csv("Sex ratio by age (OWID based on UNWPP, 2017).csv")
+
+str(sex_ratio)
+
+germany <- sex_ratio %>%
+  filter(Entity == "Germany", Year %in% c(1970, 1999))
+
+germany_long <- germany %>%
+  pivot_longer(
+    cols = starts_with("Sex ratio by age"),
+    names_to = "age_group",
+    values_to = "sex_ratio"
+  )
+
+germany_long <- germany_long %>%
+  mutate(
+    Age = parse_number(age_group),
+    Age = case_when(
+      is.na(Age) & age_group == "Sex ratio by age (one-year olds)" ~ 1,
+      is.na(Age) & age_group == "Sex ratio by age (five-year olds)" ~ 5,
+      TRUE ~ Age
+    )
+  ) %>%
+  select(Year, Age, sex_ratio)
+
+germany_long %>%
+  group_by(Year) %>%
+  summarise(mean_ratio = mean(sex_ratio, na.rm = TRUE))
+
+germany_long <- germany_long %>%
+  mutate(age_group = case_when(
+    Age <= 19 ~ "Young",
+    Age <= 64 ~ "Adult",
+    Age > 64  ~ "Old"
+  ))
+
+germany_long %>%
+  group_by(Year, age_group) %>%
+  summarise(mean_ratio = mean(sex_ratio, na.rm = TRUE))
+
+diff_table <- germany_long %>%
+  pivot_wider(names_from = Year, values_from = sex_ratio) %>%
+  mutate(difference = `1999` - `1970`)
+```
+
+In the grouped_df table we can see that the difference between the young group in 1970 and 1999 is very little and that there was a overload on men with over slightly over 100 men per 100 women. Looking at the adults we had much lesser men then women in the adult section which changend into much more men than women in 1999. In the old section we have much less men than in women in 1970 and even lesser men per 100 women in 1999. 
+
+Looking at table tbl_df we can see that there are living much lesser men per women in 1999 than in 1970 which results as seen above from the massive differences especially in the older age.
+    
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
